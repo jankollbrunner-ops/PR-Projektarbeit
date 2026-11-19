@@ -1,17 +1,18 @@
-# Projektdokumentation - [Projekttitel]
+# Projektdokumentation - TokRecipe
 
 ## Projektübersicht & Zugänge
 
 | Angabe | Inhalt |
 |---|---|
-| Projekttitel | _[Titel]_ |
+| Projekttitel | TokRecipe – TikTok-Rezept-Manager |
 | Verfasser/in | _[Name, Klasse]_ |
 | GitHub-Repository | _[Link]_ |
 | Aktuelle App | _[Link]_ |
 | Getestete Version | _[Link; Commit/Tag]_ |
 | Testzugänge | _[Testkonten je Rolle oder Bereitstellungsweg; andernfalls «Nicht erforderlich»]_ |
-| Figma / Referenz-Mockup | _[Direkter Link]_ |
-| Weitere Artefakte [Optional] | _[Links, z. B. User Journey Map oder Projektboard]_ |
+| Ursprüngliches Mockup (ohne KI) | [Rezept-Manager in Figma](https://www.figma.com/proto/8hAzFUaj6PIxLZ8Yh4tYLs/Rezept-Manager?node-id=0-1&t=3nkpRtnEPffGPvk9-1) |
+| Überarbeitetes Mockup (Figma Make, KI) | [TokRecipe Recipe Manager](https://www.figma.com/make/Bx2pNObWdH60wCJHXJLxu2/TokRecipe-Recipe-Manager?fullscreen=1&t=nlKcPK5rSBOiUjvu-1) |
+| Weitere Artefakte [Optional] | Projektideen-Rezepte-Manager.pdf, Übung 9.pdf und PO Skizze.jpg (Arbeitsunterlagen; für die Abgabe noch im Repository oder über zugängliche Links bereitstellen) |
 
 > **Zugriff:** Stellt sicher, dass alle Dozierenden auf das Repository, die App und die verlinkten Artefakte zugreifen können.
 
@@ -44,50 +45,50 @@
 
 ## 1. Ausgangslage
 Kurz beschreiben, welches Problem adressiert wird und welches Ergebnis angestrebt ist. Wem nützt die Lösung, wer ist beteiligt oder betroffen?
-- **Problem:** _[Das Problem ist identifiziert, verständlich beschrieben und optional mit Beispielen illustriert]_  
-- **Ziele:** _[stichwortartig oder einige Sätze]_  
-- **Primäre Zielgruppe:** _[kurz beschreiben]_  
+- **Problem:** Gespeicherte TikTok-Kochvideos sind in App-Listen schwer wiederzufinden, beim Kochen oft zu schnell geschnitten und enthalten nicht immer klare Zutatenlisten oder Mengenangaben.
+- **Ziele:** TikTok-Rezepte zentral speichern, nach Kategorien und Suchbegriffen wiederfinden und als strukturierte Schritt-für-Schritt-Anleitung nachkochen.
+- **Primäre Zielgruppe:** Social-Media-affine Personen, insbesondere Studierende und WG-Köch:innen.
 - **Weitere Stakeholder [Optional]:** _[z. B. Verwaltung, Geschäftsleitung]_  
 
 
 ## 2. Lösungsidee
 Beschreibt die Lösungsidee.
-- **Kernfunktionalität:** _[Workflows kurz nennen und optional illustrieren]_  
-- **Annahmen [Optional]:** _[welche Hypothesen werden geprüft?]_
+- **Kernfunktionalität:** Rezepte mit Zutaten, Zubereitung und TikTok-Link erfassen, auf dem Dashboard kategorisiert suchen, Details ansehen sowie Rezepte bearbeiten, als gekocht markieren und löschen.
+- **Annahmen [Optional]:** Eine strukturierte, schnell durchsuchbare Rezeptsammlung erleichtert das Wiederfinden und Nachkochen gespeicherter Kurzvideos.
 - **Abgrenzung [Optional]:** _[Was gehört explizit nicht zum Umfang?]_
 
 ## 3. Vorgehen & Artefakte
 Die Durchführung erfolgt phasenbasiert; dokumentiert die wichtigsten Ergebnisse je Phase.
 
 ### 3.1 Understand & Define
-- **Zielgruppenverständnis:** _[Problemraumanalyse, Recherche, (Proto-)Personas]_
-- **Wesentliche Erkenntnisse:** _[Stichpunkte]_
+- **Zielgruppenverständnis:** Die drei Proto-Personas konkretisieren unterschiedliche Nutzungssituationen: Lisa, die spontane Studentin, sucht abends schnelle Kochinspiration in ihrer WG; Kevin, der strukturierte Meal-Prepper, möchte Rezepte und Einkäufe planen; Sarah, die experimentierfreudige WG-Köchin, kocht für mehrere Personen und möchte eigene Anpassungen festhalten. Die Persona-Ausarbeitung ist in «Übung 9.pdf» dokumentiert.
+- **Wesentliche Erkenntnisse:** Gespeicherte Videos sind in App-Listen schwer wiederzufinden, zum parallelen Kochen oft zu schnell und enthalten nicht immer genaue Zutaten oder Mengen. Die How-Might-We-Fragen fokussieren darauf, Video-Rezepte dauerhaft und strukturiert zu speichern und den Kochprozess mit ihnen stressfreier zu gestalten. Gewünscht sind ausserdem gut lesbare Mengen und Schritte, die beim Kochen ohne ständiges Pausieren nutzbar sind.
 
 ### 3.2 Sketch
-- **Variantenüberblick:** _[kurz]_
-- **Skizzen:** _[Mehrere Varianten; Unterschiede kurz dokumentieren.]_
+- **Variantenüberblick:** Eine handgezeichnete UI-Skizze untersucht Dashboard, Rezept-Erfassung und Rezeptdetails; sie liegt als «PO Skizze.jpg» vor. Weitere Skizzen und Artefakte sind in «Übung 9.pdf» dokumentiert.
+- **Skizzen:** Das Dashboard zeigt kategorisierte Rezeptkarten, Bewertungen und ein Random-Rezept. Die Erfassungsansicht enthält Name, Zutaten, Rezepttext und Link; die Detailansicht kombiniert Video, Zutaten und Kochanleitung.
 
 ### 3.3 Decide
-- **Gewählte Variante & Begründung:** _[Entscheidkriterien nennen]_  
-- **End-to-End-Ablauf:** _[Beschreibung inkl. User Journey Map]_  
-- **Mockup:** Link siehe «Figma / Referenz-Mockup» in der [Projektübersicht](#projektübersicht--zugänge). _[Screenshots mit kurzen Beschreibungen]_
+- **Gewählte Variante & Begründung:** Das ursprüngliche Figma-Mockup wurde ohne KI erstellt. Danach wurde es mit Figma Make KI-unterstützt überarbeitet. Die überarbeitete Variante mit Navigation, Suche, kategorisierten Rezeptkarten und Zufallsrezept diente als Referenz für den Prototyp.
+- **End-to-End-Ablauf:** Die User Journey Map beschreibt vier Phasen: TikTok-Rezept entdecken, Link und Rezeptangaben speichern, Rezepte in der Übersicht auswählen und beim Kochen die Detailansicht mit Video nutzen. Als Risiken sind unter anderem verlorene oder nicht auflösbare Links, eine unübersichtliche Sammlung und ein nicht verfügbares Video festgehalten.
+- **Mockups:** Links zu beiden Versionen siehe [Projektübersicht](#projektübersicht--zugänge). Die Konzeptunterlagen und Journey Map sind in «Projektideen-Rezepte-Manager.pdf» und «Übung 9.pdf» enthalten.
 
 ### 3.4 Prototype
 
 #### 3.4.1. Entwurf (Design)
 Beschreibt die Gestaltung und Interaktion.
 > **Hinweis:** Hier wird der **Prototyp** beschrieben, nicht das **Mockup**.
-- **Informationsarchitektur:** _[z. B. Seiten/Navigation: Konzept, nicht die technische Umsetzung]_
-- **User Interface Design:** _[wichtige Screens: Screenshots mit kurzen Erläuterungen]_  
-- **Designentscheidungen:** _[zentrale Entscheidungen und Begründungen]_
+- **Informationsarchitektur:** Die gemeinsame Navigation enthält Home, Rezept hinzufügen und eine Rezeptsuche. Das Dashboard zeigt kategorisierte Rezeptkarten und ein Zufallsrezept; Erfassungsformular und Detailseite unterstützen das Speichern, Bearbeiten und Löschen.
+- **User Interface Design:** Helles, warmes Dashboard mit korallroten Aktionen, salbeigrüner Hero-Fläche und TikTok-Player-Vorschauen in den Rezeptkarten. Die Detailseite bindet den Player ebenfalls ein und bietet einen externen TikTok-Link als Ausweichmöglichkeit.
+- **Designentscheidungen:** Klare Typografie und sichtbare Aktionen unterstützen die spontane Nutzung. Zutaten, optionale schriftliche Kochschritte und optionale Portionenzahl sind getrennt und schnell erfassbar; wenn eine schriftliche Anleitung fehlt, hilft das eingebettete Video beim Nachkochen.
 
 #### 3.4.2. Umsetzung (Technik)
 Fasst die technische Realisierung zusammen.
-- **Technologie-Stack:** SvelteKit 3 (verbindliche Vorgabe). _[Verwendete Bibliotheken ergänzen, falls genutzt.]_
-- **Tooling:** _[IDE/Erweiterungen, lokale/Cloud-Tools; den Einsatz von KI beschreibt ihr im Kapitel **KI-Deklaration**]_  
-- **Vorgehen bei der Implementierung:** _[Wie wurde die Umsetzung schrittweise erarbeitet? Wie wurden Funktionen entwickelt, geprüft und überarbeitet? Bei KI-Unterstützung: Zusammenspiel zwischen eigener Arbeit und KI kurz beschreiben und für Details auf Kap. 6 verweisen.]_
-- **Struktur & Komponenten:** _[Seiten, Routen, State/Stores, wichtige Komponenten]_
-- **Daten & Schnittstellen:** _[Wie werden Daten gespeichert, verwaltet, abgerufen?]_
+- **Technologie-Stack:** SvelteKit 3, Svelte 5, JavaScript und MongoDB Node.js Driver.
+- **Tooling:** Visual Studio Code, Git, MongoDB Compass und MongoDB Atlas. KI-Unterstützung ist in Kap. 6 dokumentiert.
+- **Vorgehen bei der Implementierung:** Iterative Umsetzung der Dashboard-Oberfläche, Formular- und Detail-Workflows sowie der serverseitigen MongoDB-Anbindung. Die Verbindung zu MongoDB Atlas wurde eingerichtet und vom Studierenden als funktionsfähig bestätigt. TikTok-Videos werden über den offiziellen Embed Player eingebunden; für noch nicht auflösbare Kurzlinks wird die Video-ID über TikToks oEmbed-Schnittstelle ermittelt.
+- **Struktur & Komponenten:** `src/routes/+page.svelte` und `+page.server.js` zeigen und suchen Rezepte. `/recipes/new` erfasst ein Rezept; `/recipes/[id]` zeigt, bearbeitet und löscht es. `src/lib/server/mongodb.js` kapselt den Datenbankzugriff; `recipe-form.js` validiert Formulareingaben.
+- **Daten & Schnittstellen:** Rezepte werden serverseitig in der MongoDB-Datenbank `tokrecipe`, Collection `recipes`, gespeichert und von dort geladen. Die Verbindungsdaten liegen lokal in `.env` und werden nicht versioniert. Die Datenbank und Collection entstehen mit dem ersten gespeicherten Rezept.
 - **Deployment:** Link siehe «Aktuelle App» in der [Projektübersicht](#projektübersicht--zugänge).
 - **Besondere Entscheidungen:** _[z. B. Trade-offs, Vereinfachungen]_  
 
@@ -149,15 +150,15 @@ Die folgende Deklaration ist verpflichtend und beschreibt den Einsatz von KI im 
 > **Hinweis:** Dokumentiert den KI-Einsatz im gesamten Projekt, einschliesslich der Implementierung und eines allfälligen Einsatzes von KI-Agenten (Agentic Coding). Beschreibt die tatsächlich praktizierte Arbeitsweise. Falls keine KI eingesetzt wurde, gebt dies ausdrücklich an; die Unterkapitel 6.1–6.3 können dann entfallen.
 
 ### 6.1 KI-Tools
-- **Eingesetzte Tools**: _[z. B. Copilot, ChatGPT, Claude, lokale Modelle; Version/Variante wenn bekannt]_
-- **Zweck & Umfang**: _[wie, wofür und in welchem Ausmass wurde KI eingesetzt (z. B. Textentwürfe, Codevorschläge, Tests, Refactoring); welche Teile stammen (ganz/teilweise) aus KI-Unterstützung?]_
-- **Eigene Leistung (Abgrenzung):** _[was ist eigenständig erarbeitet/überarbeitet worden?]_
+- **Eingesetzte Tools**: GitHub Copilot in Visual Studio Code sowie Figma Make.
+- **Zweck & Umfang**: Figma Make wurde zur KI-unterstützten Überarbeitung des ursprünglichen Mockups verwendet. GitHub Copilot unterstützte die Umsetzung des SvelteKit-Prototyps, die MongoDB-Anbindung, Formularvalidierung, Gestaltung und Dokumentation.
+- **Eigene Leistung (Abgrenzung):** Projektidee, Problemraumanalyse, Personas, Papier-Skizze und ursprüngliches Figma-Mockup stammen vom Studierenden. Das überarbeitete Mockup und der Code wurden mit KI-Unterstützung erstellt; Anforderungen, Vorschläge und Änderungen werden vom Studierenden geprüft.
 
 ### 6.2 Vorgehen mit KI
-- **Arbeitsablauf & Aufgabenverteilung:** _[Wie wurde mit KI gearbeitet? Welche Aufgaben wurden selbst übernommen, welche an KI übertragen? Bei Agentic Coding: Welche Handlungsspielräume hatten die Agenten und wann wurde eingegriffen?]_
-- **Prompt-Vorgehen & Kontext:** _[Wie wurden Aufgaben formuliert und relevante Informationen bereitgestellt? Grundlegende Vorgehensweise beschreiben; konkrete Prompts höchstens als Beispiele aufführen.]_
-- **Konfiguration & Werkzeuge:** _[Falls verwendet: projektspezifische Agenten-Anweisungen, Konfigurationen, Kontextdateien und Tool-Anbindungen beschreiben und im Repository referenzieren. Andernfalls: «Keine».]_
-- **Prüfung & Überarbeitung:** _[Wie wurden KI-Ergebnisse auf Korrektheit, Qualität und Urheberrecht/Quellen geprüft? Wie wurden Fehler erkannt und Ergebnisse überarbeitet?]_
+- **Arbeitsablauf & Aufgabenverteilung:** Das ursprüngliche Mockup wurde ohne KI erstellt und anschliessend mit Figma Make KI-unterstützt überarbeitet. Copilot wurde danach schrittweise für die Implementierung und Dokumentation eingesetzt. Datenbankzugang und Verbindungsdaten richtet der Studierende selbst ein; Ergebnisse sind vor Abgabe zu prüfen.
+- **Prompt-Vorgehen & Kontext:** Anforderungen, Zielgruppen, Workflows, Mockup-Links und Modulvorgaben wurden als Kontext für die KI-Unterstützung bereitgestellt. Änderungen wurden schrittweise auf den jeweils vereinbarten Umfang begrenzt.
+- **Konfiguration & Werkzeuge:** MongoDB-Verbindungsparameter sind in `.env.example` dokumentiert und werden lokal über `.env` bereitgestellt. Keine projektspezifischen Agenten, MCP-Tools oder zusätzlichen KI-Konfigurationen.
+- **Prüfung & Überarbeitung:** Der Produktions-Build wurde ausgeführt; ein Fehler mit dem projektspezifischen `#lib`-Alias wurde behoben und erneut geprüft. Die Atlas-Verbindung wurde vom Studierenden als funktionsfähig bestätigt. Die geänderten Formulare, Player-Einbettungen und Workflows werden mit dem Projekt-Build geprüft; die Player-Anzeige hängt zusätzlich von TikTok und der Verfügbarkeit des jeweiligen Videos ab. KI-Ergebnisse werden vor der Abgabe vom Studierenden geprüft und angepasst.
 
 ### 6.3 Reflexion
 _[Nutzen, Grenzen, Risiken/Qualitätssicherung, ...]_

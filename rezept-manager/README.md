@@ -1,56 +1,43 @@
-# sv
+# TokRecipe
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+TokRecipe ist ein SvelteKit-Prototyp zum Speichern, Organisieren und Nachkochen von TikTok-Rezepten. Die Projektdokumentation folgt der vorgegebenen Kapitelstruktur in [VORLAGE_README.md](./VORLAGE_README.md).
 
-## Creating a project
+## Lokal starten
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Installiere die Abhängigkeiten:
 
-```sh
-# create a new project
-npx sv create my-app
-```
+   ```powershell
+   npm install
+   ```
 
-To recreate this project with the same configuration:
+2. Erstelle eine lokale Umgebungsdatei:
 
-```sh
-# recreate this project
-npx sv@1.6.0 create --template minimal --no-types --install npm rezept-manager
-```
+   ```powershell
+   Copy-Item .env.example .env
+   ```
 
-## Adding features
+3. Trage in `.env` deine MongoDB-Atlas-URI ein. Erstelle in Atlas einen Datenbankbenutzer und erlaube den Zugriff von deiner aktuellen IP-Adresse. Zugangsdaten gehören nur in `.env`, niemals ins Repository.
+4. Starte die App:
 
-Add features to your project with `sv add`:
+   ```powershell
+   npm run dev
+   ```
 
-```sh
-npx sv add
-```
+Die Datenbank `tokrecipe` und die Collection `recipes` werden mit dem ersten gespeicherten Rezept angelegt. In MongoDB Compass kannst du dieselbe Atlas-URI verwenden, um die gespeicherten Rezepte anzusehen.
 
-For example, to add Tailwind CSS:
+## MongoDB Atlas einrichten
 
-```sh
-npx sv add tailwindcss
-```
+1. Erstelle in MongoDB Atlas ein Projekt und einen Cluster (Free-Tier, sofern verfügbar).
+2. Unter **Database Access** erstelle einen Datenbankbenutzer mit einem eigenen Passwort.
+3. Unter **Network Access** gib deine aktuelle IP-Adresse frei. Öffne den Zugriff nicht pauschal für alle IP-Adressen.
+4. Wähle beim Cluster **Connect → Drivers → Node.js** und kopiere die Verbindungs-URI.
+5. Ersetze in deiner lokalen `.env` die Platzhalter `USERNAME`, `PASSWORD` und `YOUR-CLUSTER` in `MONGODB_URI`. Bei Sonderzeichen im Passwort muss die URI-Codierung beachtet werden. Die URI nie in den Chat oder ins Repository kopieren.
+6. Starte die App neu, speichere ein Rezept und prüfe in Compass mit derselben URI die Datenbank `tokrecipe` und Collection `recipes`.
 
-## Developing
+## Projekt prüfen
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
+```powershell
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Für ein Deployment müssen `MONGODB_URI` und `MONGODB_DB` als private Umgebungsvariablen beim gewählten Hosting-Anbieter hinterlegt werden.
