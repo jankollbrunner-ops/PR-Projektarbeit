@@ -1,6 +1,11 @@
 <script>
 	let { data, form } = $props();
 	let deletePromptOpen = $state(false);
+
+	function openLogin(event) {
+		event.preventDefault();
+		window.dispatchEvent(new CustomEvent('tokrecipe-auth-open'));
+	}
 </script>
 
 <svelte:head>
@@ -42,6 +47,24 @@
 			</div>
 			<div class="recipe-illustration" aria-hidden="true">🍲</div>
 		</header>
+
+		<div class="save-recipe-bar">
+			{#if data.user}
+				{#if data.isSaved}
+					<form method="POST" action="?/unsave">
+						<button class="unsave-button" type="submit">Gespeichert ✓ <span>Entfernen</span></button>
+					</form>
+				{:else}
+					<form method="POST" action="?/save">
+						<button class="save-button" type="submit">♡ Rezept speichern</button>
+					</form>
+				{/if}
+			{:else}
+				<button class="save-button" type="button" onclick={openLogin}>♡ Rezept speichern</button>
+			{/if}
+			{#if form?.saveSuccess}<p class="save-success" role="status">{form.saveSuccess}</p>{/if}
+			{#if form?.saveError}<p class="save-error" role="alert">{form.saveError}</p>{/if}
+		</div>
 
 		{#if form?.success}<p class="success-message" role="status">{form.success}</p>{/if}
 		{#if form?.errors}<p class="error-message" role="alert">Bitte prüfe die markierten Angaben im Bearbeitungsformular.</p>{/if}
@@ -277,6 +300,62 @@
 
 	.recipe-meta .filled {
 		color: #efa03c;
+	}
+
+	.save-recipe-bar {
+		align-items: center;
+		background: white;
+		border: 1px solid #eeece4;
+		border-radius: 14px;
+		display: flex;
+		gap: 12px;
+		margin: -8px 0 20px;
+		padding: 10px;
+	}
+
+	.save-recipe-bar form {
+		margin: 0;
+	}
+
+	.save-button,
+	.unsave-button {
+		border: 0;
+		border-radius: 10px;
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.9rem;
+		font-weight: 700;
+		padding: 11px 14px;
+	}
+
+	.save-button {
+		background: #ef604f;
+		color: white;
+	}
+
+	.unsave-button {
+		background: #edf4e5;
+		color: #4f693a;
+	}
+
+	.unsave-button span {
+		font-size: 0.78rem;
+		margin-left: 4px;
+		opacity: 0.75;
+	}
+
+	.save-success,
+	.save-error {
+		font-size: 0.84rem;
+		margin: 0;
+	}
+
+	.save-success {
+		color: #4f693a;
+	}
+
+	.save-error {
+		color: #a93c31;
 	}
 
 	.rating-display {

@@ -4,6 +4,7 @@ import { ADMIN_DELETE_PASSWORD } from '$app/env/private';
 import { getRecipesCollection } from '#lib/server/mongodb.js';
 import { readRecipeForm } from '#lib/server/recipe-form.js';
 import { appendRecipeRating, getRecipeRatingSummary } from '#lib/server/recipe-rating.js';
+import { getSavedRecipesCollection, getSessionUser } from '#lib/server/auth.js';
 import { parseTikTokVideoId, resolveTikTokVideoId } from '#lib/server/tiktok.js';
 
 function getObjectId(id) {
@@ -14,7 +15,7 @@ function getObjectId(id) {
 	return new ObjectId(id);
 }
 
-export async function load({ params }) {
+export async function load({ params, cookies }) {
 	const collection = await getRecipesCollection();
 	const recipe = await collection.findOne({ _id: getObjectId(params.id) });
 
@@ -30,13 +31,24 @@ export async function load({ params }) {
 		}
 	}
 
+	const user = await getSessionUser(cookies);
+	let isSaved = false;
+	if (user) {
+		const savedRecipes = await getSavedRecipesCollection();
+		isSaved = Boolean(
+			await savedRecipes.findOne({ userId: new ObjectId(user._id), recipeId: params.id })
+		);
+	}
+
 	return {
 		recipe: {
 			...recipe,
 			...getRecipeRatingSummary(recipe),
 			_id: recipe._id.toString(),
 			videoId
-		}
+		},
+		user,
+		isSaved
 	};
 }
 
@@ -91,6 +103,41 @@ export const actions = {
 		}
 
 		return { ratingSuccess: 'Danke! Deine Bewertung wurde gespeichert.' };
+	},
+	save: async ({ params, cookies }) => {
+		const user = await getSessionUser(cookies);
+		if (!user) {
+			return fail(401, { saveError: 'Bitte melde dich an, um Rezepte zu speichern.' });
+		}
+
+		const savedRecipes = await getSavedRecipesCollection();
+		await savedRecipes.updateOne(
+			{ userId: new ObjectId(user._id), recipeId: params.id },
+			{
+				$set: {
+					isCooked: false,
+					updatedAt: new Date()
+				},
+				$setOnInsert: {
+					userId: new ObjectId(user._id),
+					recipeId: params.id,
+					savedAt: new Date()
+				}
+			},
+			{ upsert: true }
+		);
+
+		return { saveSuccess: 'Das Rezept wurde gespeichert.' };
+	},
+	unsave: async ({ params, cookies }) => {
+		const user = await getSessionUser(cookies);
+		if (!user) {
+			return fail(401, { saveError: 'Bitte melde dich an.' });
+		}
+
+		const savedRecipes = await getSavedRecipesCollection();
+		await savedRecipes.deleteOne({ userId: new ObjectId(user._id), recipeId: params.id });
+		return { saveSuccess: 'Das Rezept wurde aus deinen gespeicherten Rezepten entfernt.' };
 	},
 	remove: async ({ params, request }) => {
 		if (!ADMIN_DELETE_PASSWORD) {

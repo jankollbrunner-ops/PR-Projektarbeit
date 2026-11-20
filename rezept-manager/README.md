@@ -25,6 +25,12 @@ TokRecipe ist ein SvelteKit-Prototyp zum Speichern, Organisieren und Nachkochen 
 
 Die Datenbank `tokrecipe` und die Collection `recipes` werden mit dem ersten gespeicherten Rezept angelegt. In MongoDB Compass kannst du dieselbe Atlas-URI verwenden, um die gespeicherten Rezepte anzusehen.
 
+## Benutzer und gespeicherte Rezepte
+
+Die Anmeldung verwendet einen eindeutigen Benutzernamen und benötigt für diesen Prototyp kein Passwort. Die aktuelle Sitzungs-ID wird als HttpOnly-Cookie gespeichert. Für echte Mehrbenutzeranwendungen sollte diese vereinfachte Identifikation durch sichere Authentifizierung und Rechteprüfung ersetzt werden.
+
+Für registrierte Benutzer werden zusätzlich die MongoDB-Collections `users`, `sessions` und `savedRecipes` verwendet. Die persönliche Seite `/saved` zeigt gespeicherte Rezepte und trennt noch offene von bereits gekochten Rezepten.
+
 ## MongoDB Atlas einrichten
 
 1. Erstelle in MongoDB Atlas ein Projekt und einen Cluster (Free-Tier, sofern verfügbar).

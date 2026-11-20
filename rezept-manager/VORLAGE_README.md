@@ -53,9 +53,9 @@ Kurz beschreiben, welches Problem adressiert wird und welches Ergebnis angestreb
 
 ## 2. Lösungsidee
 Beschreibt die Lösungsidee.
-- **Kernfunktionalität:** Rezepte mit Zutaten, optionaler Zubereitung und TikTok-Link erfassen, auf dem Dashboard kategorisiert suchen, Details ansehen, bearbeiten und löschen. Nach dem Kochen können weitere Bewertungen abgegeben werden; angezeigt wird der Durchschnitt aller Bewertungen.
+- **Kernfunktionalität:** Rezepte mit Zutaten, optionaler Zubereitung und TikTok-Link erfassen, auf dem Dashboard kategorisiert suchen, Details ansehen, bearbeiten und löschen. Nach dem Kochen können weitere Bewertungen abgegeben werden; angezeigt wird der Durchschnitt aller Bewertungen. Benutzer können sich mit einem eindeutigen Namen anmelden, Rezepte speichern und auf einer persönlichen Seite als bereits gekocht markieren.
 - **Annahmen [Optional]:** Eine strukturierte, schnell durchsuchbare Rezeptsammlung erleichtert das Wiederfinden und Nachkochen gespeicherter Kurzvideos.
-- **Abgrenzung [Optional]:** _[Was gehört explizit nicht zum Umfang?]_
+- **Abgrenzung [Optional]:** Einbindung anderer Videoplattformen, Eigene Video/Bilder. Automatisches Auslesen von Rezept und Zutaten aus Videobeschreibung von Tiktok.
 
 ## 3. Vorgehen & Artefakte
 Die Durchführung erfolgt phasenbasiert; dokumentiert die wichtigsten Ergebnisse je Phase.
@@ -78,9 +78,9 @@ Die Durchführung erfolgt phasenbasiert; dokumentiert die wichtigsten Ergebnisse
 #### 3.4.1. Entwurf (Design)
 Beschreibt die Gestaltung und Interaktion.
 > **Hinweis:** Hier wird der **Prototyp** beschrieben, nicht das **Mockup**.
-- **Informationsarchitektur:** Die gemeinsame Navigation enthält Home, Rezept hinzufügen und eine Rezeptsuche. Das Dashboard zeigt kategorisierte Rezeptkarten und ein Zufallsrezept; Erfassungsformular und Detailseite unterstützen das Speichern, Bearbeiten und Löschen.
-- **User Interface Design:** Helles, warmes Dashboard mit korallroten Aktionen, salbeigrüner Hero-Fläche und TikTok-Player-Vorschauen in den Rezeptkarten. Die Detailseite bindet den Player ebenfalls ein und bietet einen externen TikTok-Link als Ausweichmöglichkeit.
-- **Designentscheidungen:** Klare Typografie und sichtbare Aktionen unterstützen die spontane Nutzung. Zutaten, optionale schriftliche Kochschritte und optionale Portionenzahl sind getrennt und schnell erfassbar; wenn eine schriftliche Anleitung fehlt, hilft das eingebettete Video beim Nachkochen. Bewertungen können nach jedem erneuten Kochen ergänzt werden; Karten und Detailansicht zeigen den Durchschnitt sowie die Anzahl der Bewertungen.
+- **Informationsarchitektur:** Die gemeinsame Navigation enthält Home, Rezept hinzufügen, eine Rezeptsuche, eine Anmeldung über das Benutzersymbol sowie den Link «Meine gespeicherten Rezepte». Das Dashboard zeigt kategorisierte Rezeptkarten und ein Zufallsrezept; Erfassungsformular und Detailseite unterstützen das Speichern, Bearbeiten und Löschen. Angemeldete Benutzer verwalten ihre persönliche Liste auf einer eigenen Seite und können dort Rezepte als «Bereits gekocht» markieren.
+- **User Interface Design:** Helles, warmes Dashboard mit korallroten Aktionen, salbeigrüner Hero-Fläche und TikTok-Player-Vorschauen in den Rezeptkarten. Die Detailseite bindet den Player ebenfalls ein und bietet einen externen TikTok-Link als Ausweichmöglichkeit. Das Login-/Registrierungsfenster öffnet sich beim Benutzersymbol, beim Zugriff auf die persönliche Liste und beim Speichern eines Rezepts; angemeldete Benutzer sehen dort nur ihren Benutzernamen und den Abmeldebutton.
+- **Designentscheidungen:** Klare Typografie und sichtbare Aktionen unterstützen die spontane Nutzung. Zutaten, optionale schriftliche Kochschritte und optionale Portionenzahl sind getrennt und schnell erfassbar; wenn eine schriftliche Anleitung fehlt, hilft das eingebettete Video beim Nachkochen. Bewertungen können nach jedem erneuten Kochen ergänzt werden; Karten und Detailansicht zeigen den Durchschnitt sowie die Anzahl der Bewertungen. Registrierung und Anmeldung benötigen für den Prototyp keinen Passwortschutz, da sie nur für persönliche Listen dienen.
 
 #### 3.4.2. Umsetzung (Technik)
 Fasst die technische Realisierung zusammen.
@@ -88,9 +88,10 @@ Fasst die technische Realisierung zusammen.
 - **Tooling:** Visual Studio Code, Git, MongoDB Compass und MongoDB Atlas. KI-Unterstützung ist in Kap. 6 dokumentiert.
 - **Vorgehen bei der Implementierung:** Iterative Umsetzung der Dashboard-Oberfläche, Formular- und Detail-Workflows sowie der serverseitigen MongoDB-Anbindung. Die Verbindung zu MongoDB Atlas wurde eingerichtet und vom Studierenden als funktionsfähig bestätigt. Das Löschen eines Rezepts erfordert ein serverseitig geprüftes Admin-Passwort aus `ADMIN_DELETE_PASSWORD`. TikTok-Videos werden über den offiziellen Embed Player eingebunden; für noch nicht auflösbare Kurzlinks wird die Video-ID über TikToks oEmbed-Schnittstelle ermittelt.
 - **Struktur & Komponenten:** `src/routes/+page.svelte` und `+page.server.js` zeigen und suchen Rezepte. `/recipes/new` erfasst ein Rezept; `/recipes/[id]` zeigt, bearbeitet und löscht es. `src/lib/server/mongodb.js` kapselt den Datenbankzugriff; `recipe-form.js` validiert Formulareingaben.
-- **Daten & Schnittstellen:** Rezepte werden serverseitig in der MongoDB-Datenbank `tokrecipe`, Collection `recipes`, gespeichert und von dort geladen. Einzelbewertungen werden als Liste gespeichert; der angezeigte Bewertungswert ist ihr Durchschnitt. Ältere Rezepte mit einer einzelnen Bewertung werden weiterhin unterstützt. Die Verbindungsdaten liegen lokal in `.env` und werden nicht versioniert. Die Datenbank und Collection entstehen mit dem ersten gespeicherten Rezept.
+- **Daten & Schnittstellen:** Rezepte werden serverseitig in der MongoDB-Datenbank `tokrecipe`, Collection `recipes`, gespeichert und von dort geladen. Einzelbewertungen werden als Liste gespeichert; der angezeigte Bewertungswert ist ihr Durchschnitt. Ältere Rezepte mit einer einzelnen Bewertung werden weiterhin unterstützt. Benutzer werden über eindeutige Benutzernamen in der Collection `users` verwaltet, Sitzungen werden in `sessions` gespeichert und persönliche Rezeptzuordnungen sowie deren Kochstatus in `savedRecipes`. Die Benutzeranmeldung ist für diesen Prototyp bewusst ohne Passwort umgesetzt. Die Verbindungsdaten liegen lokal in `.env` und werden nicht versioniert. Die Datenbank und Collections entstehen mit den ersten gespeicherten Daten.
 - **Deployment:** Link siehe «Aktuelle App» in der [Projektübersicht](#projektübersicht--zugänge).
-- **Besondere Entscheidungen:** _[z. B. Trade-offs, Vereinfachungen]_  
+- **Besondere Entscheidungen:** Der Prototyp trennt den verbindlichen Rezeptmanager vom optionalen Benutzersystem: Rezepte können auch ohne Anmeldung angesehen und erstellt werden. Die personalisierten Funktionen werden zusätzlich in Kapitel 4.1 dokumentiert.
+- **Erfüllung des Mindestumfangs:** Abgedeckt sind ein funktionsfähiges SvelteKit-Dashboard mit Suche und Kategorien, die Erfassung eines Rezepts mit Zutaten und Link, die Detailansicht, das Bearbeiten und Löschen sowie die MongoDB-Anbindung. SvelteKit-Routing und serverseitige Form Actions bilden die interaktive Anwendung; Eingabevalidierung, Fehlermeldungen und Erfolgsfeedback sind vorhanden. Die Oberfläche ist für Desktop und kleinere Bildschirmgrössen responsiv umgesetzt. Das Deployment und die Usability-Evaluation sind für die finalen Abgabeschritte noch mit einem öffentlichen Link beziehungsweise anonymisierten Testnachweisen zu ergänzen.
 
 ### 3.5 Validate
 
@@ -118,12 +119,40 @@ Dokumentiert hier Erweiterungen über den Mindestumfang hinaus. Ordnet jede Erwe
 ### 4.1 Software-Erweiterungen
 Hierzu gehören zusätzliche Funktionen und technische Verbesserungen am Prototyp.
 
-#### 4.1.1 [Titel der Erweiterung]
-- **Beschreibung & Nutzen:** _[Was wurde erweitert und welchen Mehrwert bietet es?]_
-- **Abgrenzung zum Mindestumfang:** _[Was geht konkret über die verbindlichen Anforderungen hinaus?]_
-- **Umsetzung:** _[Wie und wo wurde die Erweiterung umgesetzt?]_
-- **Nachweise:** _[Screenshot(s) mit Erläuterung; Referenzen auf die relevanten Codestellen; gegebenenfalls weitere Belege]_
-- **Bezug zur Evaluation:** _[Wurde die Erweiterung aus der Evaluation abgeleitet? Falls ja: auf die betreffende Beobachtung bzw. das Issue verweisen. Andernfalls: «Nein».]_
+#### 4.1.1 Benutzeranmeldung und Registrierung
+- **Beschreibung & Nutzen:** Benutzer können sich mit einem eindeutigen Benutzernamen anmelden oder registrieren. Die Anmeldung ermöglicht persönliche Funktionen, ohne dass für den Prototyp ein Passwort eingegeben werden muss. Bei bereits vergebenen Namen werden eine Fehlermeldung und ein freier Vorschlag wie «Name2» angezeigt.
+- **Abgrenzung zum Mindestumfang:** Der Mindestumfang verlangt keine Benutzerkonten oder Authentifizierung. Die Anmeldung geht deshalb über das rezeptorientierte CRUD hinaus.
+- **Umsetzung:** Das gemeinsame Login-/Registrierungsfenster liegt in `src/routes/+layout.svelte`. Die Anmeldung wird serverseitig in `src/routes/+page.server.js` verarbeitet. Benutzerdaten und Sitzungen verwaltet `src/lib/server/auth.js` in den MongoDB-Collections `users` und `sessions`; die Sitzung wird als HttpOnly-Cookie geführt.
+- **Nachweise:** Screenshot des Login-/Registrierungsfensters sowie des angemeldeten Zustands mit Benutzername und Abmeldebutton ergänzen. Relevante Codestellen: `src/routes/+layout.svelte`, `src/routes/+page.server.js`, `src/lib/server/auth.js`.
+- **Bezug zur Evaluation:** _[Nach Durchführung der Evaluation ergänzen; falls die Anmeldung nicht aus einer Evaluation abgeleitet wurde, «Nein» angeben.]_
+
+#### 4.1.2 Persönliche gespeicherte Rezepte und Kochstatus
+- **Beschreibung & Nutzen:** Angemeldete Benutzer können Rezepte auf der Detailseite speichern und auf der persönlichen Seite «Meine gespeicherten Rezepte» verwalten. Rezepte können als «Bereits gekocht» markiert, wieder geöffnet oder aus der Liste entfernt werden.
+- **Abgrenzung zum Mindestumfang:** Eine personalisierte Rezeptliste, der Kochstatus und Login-Abhängigkeit sind für den verbindlichen Rezeptmanager nicht gefordert.
+- **Umsetzung:** Die Seite und ihre Aktionen liegen in `src/routes/saved/+page.svelte` und `src/routes/saved/+page.server.js`. Zuordnungen und Kochstatus werden in der MongoDB-Collection `savedRecipes` gespeichert. Auf der Detailseite befinden sich die Aktionen zum Speichern und Entfernen in `src/routes/recipes/[id]/+page.svelte` und `src/routes/recipes/[id]/+page.server.js`.
+- **Nachweise:** Screenshots der persönlichen Liste mit offenen und bereits gekochten Rezepten sowie der Speicheraktion auf der Detailseite ergänzen. Relevante Codestellen: `src/routes/saved/+page.svelte`, `src/routes/saved/+page.server.js`, `src/routes/recipes/[id]/+page.server.js`.
+- **Bezug zur Evaluation:** _[Nach Durchführung der Evaluation ergänzen; andernfalls «Nein» angeben.]_
+
+#### 4.1.3 Wiederholte Bewertungen und Durchschnittsanzeige
+- **Beschreibung & Nutzen:** Ein Rezept kann nach erneutem Kochen nochmals bewertet werden. Dashboard und Detailansicht zeigen den Durchschnitt aller abgegebenen Bewertungen; die Detailansicht nennt zusätzlich die Anzahl der Bewertungen.
+- **Abgrenzung zum Mindestumfang:** Mehrfachbewertung und Durchschnittsberechnung gehen über eine einmalige oder rein statische Bewertung hinaus.
+- **Umsetzung:** Die Bewertungsaktion liegt in `src/routes/recipes/[id]/+page.server.js`, die Berechnung in `src/lib/server/recipe-rating.js`. Einzelbewertungen werden in der Liste `ratings` gespeichert. Bestehende Einzelbewertungen älterer Rezepte werden unterstützt und auf der Detailseite sowie auf dem Dashboard angezeigt.
+- **Nachweise:** Screenshot des Bewertungsblocks und der Durchschnittsanzeige ergänzen. Relevante Codestellen: `src/routes/recipes/[id]/+page.svelte`, `src/routes/+page.svelte`, `src/routes/recipes/[id]/+page.server.js`, `src/lib/server/recipe-rating.js`.
+- **Bezug zur Evaluation:** _[Nach Durchführung der Evaluation ergänzen; andernfalls «Nein» angeben.]_
+
+#### 4.1.4 Eingebettete TikTok-Videos und Vorschauen
+- **Beschreibung & Nutzen:** Gespeicherte TikTok-Beiträge können direkt auf der Rezeptdetailseite abgespielt und auf dem Dashboard als lazy-geladene Vorschau angezeigt werden.
+- **Abgrenzung zum Mindestumfang:** Der Mindestumfang verlangt einen TikTok-Link, aber keine eingebettete Playeranzeige oder Dashboard-Vorschau.
+- **Umsetzung:** Die Video-ID wird aus dem Link extrahiert oder über TikToks oEmbed-Schnittstelle aufgelöst. Die Einbettung liegt in `src/routes/+page.svelte` und `src/routes/recipes/[id]/+page.svelte`; die Auflösung in `src/lib/server/tiktok.js`.
+- **Nachweise:** Screenshots der Dashboard-Vorschau und des Players auf der Detailseite ergänzen. Relevante Codestellen: `src/lib/server/tiktok.js`, `src/routes/+page.svelte`, `src/routes/recipes/[id]/+page.svelte`. Originallinks werden pro Rezept gespeichert.
+- **Bezug zur Evaluation:** _[Nach Durchführung der Evaluation ergänzen; andernfalls «Nein» angeben.]_
+
+#### 4.1.5 Passwortgeschütztes Löschen und erweiterte Erfassung
+- **Beschreibung & Nutzen:** Das Löschen eines Rezepts ist über einen sichtbaren Button und eine Admin-Passwortabfrage geschützt. Die Erfassung bietet zusätzlich optional wählbare Portionen, optionalen Zubereitungstext und die Kategorien Mexican und Frühstück.
+- **Abgrenzung zum Mindestumfang:** Die Grundfunktion «Rezept löschen» ist verbindlich; der zusätzliche Adminschutz geht darüber hinaus. Portionen, optionaler Zubereitungstext und zusätzliche Kategorien sind ebenfalls Erweiterungen.
+- **Umsetzung:** Die Löschprüfung erfolgt serverseitig in `src/routes/recipes/[id]/+page.server.js` über `ADMIN_DELETE_PASSWORD`. Die Eingabemaske liegt in `src/routes/recipes/[id]/+page.svelte`. Erfassung und Validierung liegen in `src/routes/recipes/new/+page.svelte` und `src/lib/server/recipe-form.js`.
+- **Nachweise:** Screenshot der Lösch-Passwortabfrage und des erweiterten Formulars ergänzen. Relevante Codestellen: `src/routes/recipes/[id]/+page.svelte`, `src/routes/recipes/[id]/+page.server.js`, `src/routes/recipes/new/+page.svelte`, `src/lib/server/recipe-form.js`.
+- **Bezug zur Evaluation:** _[Nach Durchführung der Evaluation ergänzen; andernfalls «Nein» angeben.]_
 
 ### 4.2 Weitere Erweiterungen
 Hierzu gehören beispielsweise zusätzliche Methoden, Planungs- und Analyseartefakte, Verbesserungen der Projektorganisation oder Anpassungen eines KI-Agenten-Workflows.
@@ -150,18 +179,21 @@ Die folgende Deklaration ist verpflichtend und beschreibt den Einsatz von KI im 
 > **Hinweis:** Dokumentiert den KI-Einsatz im gesamten Projekt, einschliesslich der Implementierung und eines allfälligen Einsatzes von KI-Agenten (Agentic Coding). Beschreibt die tatsächlich praktizierte Arbeitsweise. Falls keine KI eingesetzt wurde, gebt dies ausdrücklich an; die Unterkapitel 6.1–6.3 können dann entfallen.
 
 ### 6.1 KI-Tools
-- **Eingesetzte Tools**: GitHub Copilot in Visual Studio Code sowie Figma Make.
-- **Zweck & Umfang**: Figma Make wurde zur KI-unterstützten Überarbeitung des ursprünglichen Mockups verwendet. GitHub Copilot unterstützte die Umsetzung des SvelteKit-Prototyps, die MongoDB-Anbindung, Formularvalidierung, Gestaltung und Dokumentation.
-- **Eigene Leistung (Abgrenzung):** Projektidee, Problemraumanalyse, Personas, Papier-Skizze und ursprüngliches Figma-Mockup stammen vom Studierenden. Das überarbeitete Mockup und der Code wurden mit KI-Unterstützung erstellt; Anforderungen, Vorschläge und Änderungen werden vom Studierenden geprüft.
+- **Eingesetzte Tools**: Google Gemini, einschließlich Gemini Notebook/NotebookLM auf Basis der Modulunterlagen; GitHub Copilot in Visual Studio Code; Figma Make.
+- **Zweck & Umfang**: Google Gemini unterstützte die Ideenfindung, die Problemraumanalyse, die Nutzerzentrierung, die Konzeption, die technische Machbarkeitseinschätzung, die Projektreflexion und die Qualitätssicherung. Figma Make wurde zur KI-unterstützten Überarbeitung des ursprünglichen Mockups verwendet. GitHub Copilot unterstützte die Umsetzung des SvelteKit-Prototyps, die MongoDB-Anbindung, Formularvalidierung, Gestaltung und Dokumentation.
+- **Eigene Leistung (Abgrenzung):** Projektidee, Problemraumanalyse, Personas, Papier-Skizze und ursprüngliches klickbares Figma-Mockup stammen vom Studierenden. Die von Google Gemini vorgeschlagenen Formulierungen, HMW-Fragen, Personas, Workflows und technischen Optionen sowie die Vorschläge von GitHub Copilot und Figma Make wurden kritisch geprüft, auf die eigenen Anforderungen und Modulvorgaben angepasst und selbstständig weiterverarbeitet. Sämtliche Architekturentscheide, Code-Anpassungen, Tests, Dokumentation und rechtlichen Prüfungen wurden eigenverantwortlich durchgeführt und validiert.
 
 ### 6.2 Vorgehen mit KI
-- **Arbeitsablauf & Aufgabenverteilung:** Das ursprüngliche Mockup wurde ohne KI erstellt und anschliessend mit Figma Make KI-unterstützt überarbeitet. Copilot wurde danach schrittweise für die Implementierung und Dokumentation eingesetzt. Datenbankzugang und Verbindungsdaten richtet der Studierende selbst ein; Ergebnisse sind vor Abgabe zu prüfen.
-- **Prompt-Vorgehen & Kontext:** Anforderungen, Zielgruppen, Workflows, Mockup-Links und Modulvorgaben wurden als Kontext für die KI-Unterstützung bereitgestellt. Änderungen wurden schrittweise auf den jeweils vereinbarten Umfang begrenzt.
-- **Konfiguration & Werkzeuge:** MongoDB-Verbindungsparameter sind in `.env.example` dokumentiert und werden lokal über `.env` bereitgestellt. Keine projektspezifischen Agenten, MCP-Tools oder zusätzlichen KI-Konfigurationen.
-- **Prüfung & Überarbeitung:** Der Produktions-Build wurde ausgeführt; ein Fehler mit dem projektspezifischen `#lib`-Alias wurde behoben und erneut geprüft. Die Atlas-Verbindung wurde vom Studierenden als funktionsfähig bestätigt. Die geänderten Formulare, Player-Einbettungen und Workflows werden mit dem Projekt-Build geprüft; die Player-Anzeige hängt zusätzlich von TikTok und der Verfügbarkeit des jeweiligen Videos ab. KI-Ergebnisse werden vor der Abgabe vom Studierenden geprüft und angepasst.
+- **Arbeitsablauf & Aufgabenverteilung:** Google Gemini wurde über mehrere Projektphasen eingesetzt. Bei der Ideenfindung und Problemraumanalyse unterstützte es mit Brainstorming, Zielgruppenformulierungen und *How Might We*-Fragen. Für Nutzerzentrierung und Konzeption wurden die Personas Lisa, Kevin und Sarah sowie eine User Journey Map für den SOLL-Zustand zu Entdecken, Speichern, Auswählen und Nachkochen strukturiert. Eine Handskizze diente als Grundlage für einen Prompt zur Strukturierung der drei Hauptansichten Dashboard, Erfassungsformular und Detailansicht. Das ursprüngliche klickbare Figma-Mockup wurde gemäss Übungsvorgabe manuell ohne KI-UI-Generator erstellt und anschliessend mit Figma Make KI-unterstützt überarbeitet. Copilot wurde danach schrittweise für Implementierung und Dokumentation eingesetzt.
+- **Prompt-Vorgehen & Kontext:** Anforderungen, Zielgruppen, Workflows, Handskizzen, Mockup-Links und Modulvorgaben wurden als Kontext bereitgestellt. Gemini wurde für strukturiertes Brainstorming, technische Machbarkeitseinschätzungen und einen einheitlichen VS-Code-Kontext-Prompt verwendet. Die Vorschläge wurden schrittweise auf den vereinbarten Umfang begrenzt und auf die eigenen Anforderungen zugeschnitten.
+- **Konfiguration & Werkzeuge:** Google Gemini und Gemini Notebook/NotebookLM wurden auf Basis der Modulunterlagen eingesetzt. Figma Make unterstützte die Mockup-Überarbeitung. MongoDB-Verbindungsparameter sind in `.env.example` dokumentiert und werden lokal über `.env` bereitgestellt. GitHub Copilot wurde mit dem VS-Code-Workspace und den projektbezogenen Anforderungen verwendet. Keine weiteren projektspezifischen Agenten oder zusätzlichen KI-Konfigurationen.
+- **Prüfung & Überarbeitung:** Bei der technischen Konzeption wurde die Machbarkeit unter anderem für Routing, `load`-Funktionen, Form Actions und MongoDB-Anbindung geprüft. Es wurde bewusst auf riskantes automatisches TikTok-Web-Scraping verzichtet und stattdessen der offizielle Embed Player beziehungsweise ein externes Öffnen des Originalvideos verwendet. Der Produktions-Build wurde ausgeführt; Probleme mit dem projektspezifischen `#lib`-Alias wurden behoben und erneut geprüft. Die Atlas-Verbindung wurde vom Studierenden als funktionsfähig bestätigt. Formulare, Player-Einbettungen, Benutzerlisten, Kochstatus und Workflows werden mit dem Projekt-Build und manuellen Funktionstests geprüft. Die Player-Anzeige hängt zusätzlich von TikTok und der Verfügbarkeit des jeweiligen Videos ab. Sämtliche KI-Ergebnisse werden vor der Abgabe vom Studierenden geprüft und angepasst.
 
 ### 6.3 Reflexion
-_[Nutzen, Grenzen, Risiken/Qualitätssicherung, ...]_
+- **Nutzen:** Google Gemini half insbesondere beim schnellen Strukturieren von Problemraum, Zielgruppen, HMW-Fragen, Personas, Workflows und technischen Alternativen. NotebookLM ermöglichte den thematischen Abgleich mit den Modulunterlagen. Figma Make beschleunigte die Überarbeitung des visuellen Konzepts, GitHub Copilot unterstützte repetitive Implementierungs-, Validierungs- und Dokumentationsaufgaben.
+- **Grenzen:** Generierte Inhalte waren nicht automatisch inhaltlich, technisch oder rechtlich korrekt. Beispielsweise mussten vorgeschlagene Textformulierungen, Persona-Annahmen, Schnittstellen, Datenstrukturen und UI-Lösungen mit dem eigenen Projekt, den Modulanforderungen und der tatsächlich verfügbaren Technik abgeglichen werden. Die Authentifizierung mit Benutzername ohne Passwort ist als Prototyp-Lösung bewusst vereinfacht.
+- **Risiken/Qualitätssicherung:** Risiken lagen in inhaltlichen Halluzinationen, veralteten API-Vorschlägen, unvollständigen Tests, fehlenden Nachweisen, Urheberrechtsfragen und einer zu breiten oder unsicheren Implementierung. Risikoarmer wurden Embedding über die offizielle TikTok-Schnittstelle, serverseitige Validierung, private Umgebungsvariablen, der Abgleich mit den Bewertungskriterien und wiederholte Produktions-Build-Prüfungen eingesetzt.
+- **Verantwortung:** Sämtliche Architekturentscheidungen, Code-Anpassungen, MongoDB-Konfigurationen, Tests, Dokumentation und rechtliche Prüfungen wurden eigenverantwortlich durchgeführt und validiert. Alle KI-generierten Vorschläge blieben Vorschläge und wurden nicht ungeprüft übernommen.
 
 ## 7. Anhang [Optional]
 
