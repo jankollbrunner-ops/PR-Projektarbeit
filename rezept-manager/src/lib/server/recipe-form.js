@@ -15,7 +15,7 @@ function splitLines(value) {
 		.filter(Boolean);
 }
 
-export function readRecipeForm(formData) {
+export function readRecipeForm(formData, { includeRating = true } = {}) {
 	const name = String(formData.get('name') ?? '').trim();
 	const category = String(formData.get('category') ?? '').trim();
 	const ingredientsInput = String(formData.get('ingredients') ?? '');
@@ -25,7 +25,8 @@ export function readRecipeForm(formData) {
 	const tiktokUrl = String(formData.get('tiktokUrl') ?? '').trim();
 	const minutesValue = String(formData.get('minutes') ?? '').trim();
 	const servingsValue = String(formData.get('servings') ?? '').trim();
-	const ratingValue = String(formData.get('rating') ?? '0').trim();
+	const ratingValue =
+		includeRating && formData.has('rating') ? String(formData.get('rating') ?? '').trim() : null;
 	const errors = {};
 
 	if (!name) errors.name = 'Bitte gib einen Rezeptnamen ein.';
@@ -70,9 +71,12 @@ export function readRecipeForm(formData) {
 		}
 	}
 
-	const rating = Number(ratingValue);
-	if (!Number.isInteger(rating) || rating < 0 || rating > 5) {
-		errors.rating = 'Die Bewertung muss zwischen 0 und 5 Sternen liegen.';
+	let rating;
+	if (ratingValue !== null) {
+		rating = Number(ratingValue);
+		if (!Number.isInteger(rating) || rating < 0 || rating > 5) {
+			errors.rating = 'Die Bewertung muss zwischen 0 und 5 Sternen liegen.';
+		}
 	}
 
 	return {
@@ -84,7 +88,7 @@ export function readRecipeForm(formData) {
 			tiktokUrl,
 			minutes,
 			servings,
-			rating
+			...(ratingValue !== null ? { rating } : {})
 		},
 		values: {
 			name,
@@ -94,7 +98,7 @@ export function readRecipeForm(formData) {
 			tiktokUrl,
 			minutes: minutesValue,
 			servings: servingsValue,
-			rating: ratingValue
+			...(ratingValue !== null ? { rating: ratingValue } : {})
 		},
 		errors
 	};

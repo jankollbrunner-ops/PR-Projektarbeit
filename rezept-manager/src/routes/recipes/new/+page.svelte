@@ -57,8 +57,8 @@
 
 		<label>
 			<span>Rezept / Zubereitung <small>(optional)</small></span>
-			<textarea name="instructions" rows="6" placeholder="Ein Schritt pro Zeile&#10;1. Wasser aufsetzen und die Nudeln kochen.">{form?.values?.instructions ?? ''}</textarea>
-			<span class="field-hint">Wenn im Video keine Anleitung steht, kannst du dieses Feld leer lassen und beim Kochen das Video nutzen.</span>
+			<textarea name="instructions" rows="6" placeholder="Ein Schritt pro Zeile; wenn du keine Anleitung hast, lass das Feld leer – das TikTok-Video wird auf der Detailseite als Kochhilfe angezeigt.">{form?.values?.instructions ?? ''}</textarea>
+			<span class="field-hint">Das Video bleibt auf der Rezeptseite eingebettet und kann dort beim Kochen genutzt werden.</span>
 			{#if form?.errors?.instructions}<small class="field-error">{form.errors.instructions}</small>{/if}
 		</label>
 
@@ -75,7 +75,7 @@
 		</label>
 
 		<label>
-			<span>Deine Bewertung</span>
+			<span>Erste Bewertung <small>(optional)</small></span>
 			<select name="rating">
 				<option value="0">Noch nicht bewertet</option>
 				{#each [1, 2, 3, 4, 5] as rating}
@@ -84,6 +84,7 @@
 					</option>
 				{/each}
 			</select>
+			<span class="field-hint">Nach dem Kochen kannst du weitere Bewertungen abgeben; angezeigt wird der Durchschnitt.</span>
 			{#if form?.errors?.rating}<small class="field-error">{form.errors.rating}</small>{/if}
 		</label>
 

@@ -16,7 +16,7 @@ TokRecipe ist ein SvelteKit-Prototyp zum Speichern, Organisieren und Nachkochen 
    Copy-Item .env.example .env
    ```
 
-3. Trage in `.env` deine MongoDB-Atlas-URI ein. Erstelle in Atlas einen Datenbankbenutzer und erlaube den Zugriff von deiner aktuellen IP-Adresse. Zugangsdaten gehören nur in `.env`, niemals ins Repository.
+3. Trage in `.env` deine MongoDB-Atlas-URI und ein `ADMIN_DELETE_PASSWORD` ein. Das lokale Testpasswort ist nur in der ignorierten `.env` gesetzt; verwende dieses Testpasswort niemals für ein Deployment. Erstelle in Atlas einen Datenbankbenutzer und erlaube den Zugriff von deiner aktuellen IP-Adresse. Zugangsdaten gehören nur in `.env`, niemals ins Repository.
 4. Starte die App:
 
    ```powershell
@@ -40,4 +40,4 @@ Die Datenbank `tokrecipe` und die Collection `recipes` werden mit dem ersten ges
 npm run build
 ```
 
-Für ein Deployment müssen `MONGODB_URI` und `MONGODB_DB` als private Umgebungsvariablen beim gewählten Hosting-Anbieter hinterlegt werden.
+Für ein Deployment müssen `MONGODB_URI`, `MONGODB_DB` und ein eigenes starkes `ADMIN_DELETE_PASSWORD` als private Umgebungsvariablen beim gewählten Hosting-Anbieter hinterlegt werden. Das lokale Testpasswort ist dafür ungeeignet.

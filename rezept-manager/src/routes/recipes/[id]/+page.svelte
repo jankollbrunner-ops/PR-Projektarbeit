@@ -1,11 +1,6 @@
 <script>
 	let { data, form } = $props();
-
-	function confirmDelete(event) {
-		if (!window.confirm('Möchtest du dieses Rezept wirklich löschen?')) {
-			event.preventDefault();
-		}
-	}
+	let deletePromptOpen = $state(false);
 </script>
 
 <svelte:head>
@@ -23,10 +18,25 @@
 				<div class="recipe-meta">
 					{#if data.recipe.minutes}<span>{data.recipe.minutes} Minuten</span>{/if}
 					{#if data.recipe.servings}<span>{data.recipe.servings} Portionen</span>{/if}
-					<span aria-label={data.recipe.rating ? `${data.recipe.rating} von 5 Sternen` : 'Noch nicht bewertet'}>
-						{#each [1, 2, 3, 4, 5] as star}
-							<span class:filled={star <= data.recipe.rating} aria-hidden="true">★</span>
-						{/each}
+					<span
+						class="rating-display"
+						aria-label={data.recipe.ratingCount
+							? `Durchschnitt ${data.recipe.rating.toFixed(1)} von 5 Sternen aus ${data.recipe.ratingCount} Bewertungen`
+							: 'Noch nicht bewertet'}
+					>
+						<span class="rating-stars">
+							{#each [1, 2, 3, 4, 5] as star}
+								<span class:filled={star <= Math.round(data.recipe.rating)} aria-hidden="true">★</span>
+							{/each}
+						</span>
+						<span class="rating-average">
+							{#if data.recipe.ratingCount}
+								{data.recipe.rating.toFixed(1)} / 5 · {data.recipe.ratingCount}
+								{data.recipe.ratingCount === 1 ? 'Bewertung' : 'Bewertungen'}
+							{:else}
+								Noch nicht bewertet
+							{/if}
+						</span>
 					</span>
 				</div>
 			</div>
@@ -35,6 +45,28 @@
 
 		{#if form?.success}<p class="success-message" role="status">{form.success}</p>{/if}
 		{#if form?.errors}<p class="error-message" role="alert">Bitte prüfe die markierten Angaben im Bearbeitungsformular.</p>{/if}
+		{#if form?.ratingSuccess}<p class="success-message" role="status">{form.ratingSuccess}</p>{/if}
+
+		<section class="rating-panel" aria-labelledby="rate-recipe-title">
+			<div>
+				<p class="section-kicker">Deine Erfahrung zählt</p>
+				<h2 id="rate-recipe-title">Nach dem Kochen bewerten</h2>
+				<p>Gib eine neue Bewertung ab. Angezeigt wird der Durchschnitt aller Bewertungen.</p>
+			</div>
+			<form method="POST" action="?/rate" class="rating-form">
+				<label for="recipe-rating">Deine Bewertung</label>
+				<div class="rating-form-controls">
+					<select id="recipe-rating" name="rating" required>
+						<option value="">Sterne auswählen</option>
+						{#each [1, 2, 3, 4, 5] as rating}
+							<option value={rating}>{'★'.repeat(rating)} ({rating}/5)</option>
+						{/each}
+					</select>
+					<button class="submit-button" type="submit">Bewertung speichern</button>
+				</div>
+				{#if form?.ratingError}<small class="field-error" role="alert">{form.ratingError}</small>{/if}
+			</form>
+		</section>
 
 		<div class="recipe-content">
 			<section class="content-card" aria-labelledby="ingredients-title">
@@ -137,26 +169,36 @@
 					{#if form?.errors?.tiktokUrl}<small class="field-error">{form.errors.tiktokUrl}</small>{/if}
 				</label>
 
-				<label>
-					<span>Deine Bewertung</span>
-					<select name="rating">
-						<option value="0" selected={Number(form?.values?.rating ?? data.recipe.rating) === 0}>Noch nicht bewertet</option>
-						{#each [1, 2, 3, 4, 5] as rating}
-							<option value={rating} selected={Number(form?.values?.rating ?? data.recipe.rating) === rating}>{'★'.repeat(rating)} ({rating}/5)</option>
-						{/each}
-					</select>
-					{#if form?.errors?.rating}<small class="field-error">{form.errors.rating}</small>{/if}
-				</label>
-
 				<div class="form-actions">
 					<button class="submit-button" type="submit">Änderungen speichern</button>
 				</div>
 			</form>
 		</details>
 
-		<form method="POST" action="?/remove" class="delete-form" onsubmit={confirmDelete}>
-			<button type="submit">Rezept löschen</button>
-		</form>
+		<div class="delete-section">
+			<button class="delete-trigger" type="button" onclick={() => (deletePromptOpen = true)}>
+				Rezept löschen
+			</button>
+			{#if form?.deleteError}
+				<p class="delete-error" role="alert">{form.deleteError}</p>
+			{/if}
+			{#if deletePromptOpen}
+				<form method="POST" action="?/remove" class="delete-prompt">
+					<label for="admin-delete-password">Admin-Passwort</label>
+					<input
+						id="admin-delete-password"
+						name="adminPassword"
+						type="password"
+						autocomplete="current-password"
+						required
+					/>
+					<div class="delete-prompt-actions">
+						<button type="button" onclick={() => (deletePromptOpen = false)}>Abbrechen</button>
+						<button class="delete-confirm-button" type="submit">Löschen bestätigen</button>
+					</div>
+				</form>
+			{/if}
+		</div>
 	</article>
 </main>
 
@@ -235,6 +277,74 @@
 
 	.recipe-meta .filled {
 		color: #efa03c;
+	}
+
+	.rating-display {
+		align-items: center;
+		display: inline-flex;
+		gap: 9px;
+	}
+
+	.rating-stars {
+		white-space: nowrap;
+	}
+
+	.rating-average {
+		font-size: 0.82rem;
+	}
+
+	.rating-panel {
+		align-items: center;
+		background: #f3f5ec;
+		border: 1px solid #e1e7d8;
+		border-radius: 18px;
+		display: grid;
+		gap: 24px;
+		grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+		margin-bottom: 20px;
+		padding: 22px 24px;
+	}
+
+	.rating-panel > div > p:last-child {
+		color: #707268;
+		font-size: 0.88rem;
+		line-height: 1.5;
+		margin: 8px 0 0;
+	}
+
+	.rating-form {
+		display: grid;
+		gap: 8px;
+	}
+
+	.rating-form > label {
+		font-size: 0.88rem;
+		font-weight: 650;
+	}
+
+	.rating-form-controls {
+		display: flex;
+		gap: 9px;
+	}
+
+	.rating-form select {
+		background: white;
+		border: 1px solid #dfe3d6;
+		border-radius: 10px;
+		color: #252621;
+		font: inherit;
+		min-width: 0;
+		padding: 10px 11px;
+	}
+
+	.rating-form select:focus {
+		border-color: #ef604f;
+		box-shadow: 0 0 0 3px #ef604f20;
+		outline: none;
+	}
+
+	.rating-form .submit-button {
+		white-space: nowrap;
 	}
 
 	.recipe-illustration {
@@ -473,13 +583,15 @@
 		padding: 11px 15px;
 	}
 
-	.delete-form {
+	.delete-section {
 		display: flex;
-		justify-content: flex-end;
+		align-items: flex-end;
+		flex-direction: column;
+		gap: 10px;
 		margin-top: 18px;
 	}
 
-	.delete-form button {
+	.delete-trigger {
 		background: transparent;
 		border: 0;
 		color: #b3473e;
@@ -487,6 +599,71 @@
 		font: inherit;
 		font-size: 0.88rem;
 		padding: 9px;
+	}
+
+	.delete-prompt {
+		background: #fff8f6;
+		border: 1px solid #f0d7d2;
+		border-radius: 14px;
+		display: grid;
+		gap: 10px;
+		max-width: 440px;
+		padding: 16px;
+		width: 100%;
+	}
+
+	.delete-prompt label {
+		font-size: 0.9rem;
+		font-weight: 650;
+	}
+
+	.delete-prompt input {
+		background: white;
+		border: 1px solid #e4d8d5;
+		border-radius: 9px;
+		font: inherit;
+		padding: 10px 12px;
+	}
+
+	.delete-prompt input:focus {
+		border-color: #ef604f;
+		box-shadow: 0 0 0 3px #ef604f20;
+		outline: none;
+	}
+
+	.delete-prompt-actions {
+		display: flex;
+		gap: 10px;
+		justify-content: flex-end;
+	}
+
+	.delete-prompt-actions button {
+		border: 0;
+		border-radius: 9px;
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.85rem;
+		font-weight: 650;
+		padding: 10px 12px;
+	}
+
+	.delete-prompt-actions button[type="button"] {
+		background: #f3f2ec;
+		color: #55574e;
+	}
+
+	.delete-confirm-button {
+		background: #b3473e;
+		color: white;
+	}
+
+	.delete-error {
+		background: #fff1ee;
+		border-radius: 9px;
+		color: #a93c31;
+		font-size: 0.87rem;
+		margin: 0;
+		padding: 10px 12px;
 	}
 
 	.success-message,
@@ -528,6 +705,10 @@
 			grid-template-columns: 1fr;
 		}
 
+		.rating-panel {
+			grid-template-columns: 1fr;
+		}
+
 		.video-section {
 			padding: 20px;
 		}
@@ -537,6 +718,15 @@
 	}
 
 	@media (max-width: 480px) {
+		.rating-panel {
+			padding: 19px 16px;
+		}
+
+		.rating-form-controls {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
 		.recipe-header {
 			align-items: flex-start;
 			flex-direction: column-reverse;

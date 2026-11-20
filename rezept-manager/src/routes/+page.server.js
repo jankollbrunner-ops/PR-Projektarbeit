@@ -1,5 +1,6 @@
 import { MONGODB_URI } from '$app/env/private';
 import { getRecipesCollection } from '#lib/server/mongodb.js';
+import { getRecipeRatingSummary } from '#lib/server/recipe-rating.js';
 import { parseTikTokVideoId, resolveTikTokVideoId } from '#lib/server/tiktok.js';
 
 function escapeRegex(value) {
@@ -39,7 +40,12 @@ export async function load({ url }) {
 				}
 			}
 
-			return { ...recipe, _id: recipe._id.toString(), videoId };
+			return {
+				...recipe,
+				...getRecipeRatingSummary(recipe),
+				_id: recipe._id.toString(),
+				videoId
+			};
 		})
 	);
 	const categories = [...new Set(recipes.map((recipe) => recipe.category))].sort();

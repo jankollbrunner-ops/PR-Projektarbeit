@@ -8,5 +8,9 @@ export const variables = defineEnvVars({
 	MONGODB_DB: {
 		schema: (value) => value?.trim() || 'tokrecipe',
 		description: 'MongoDB database name.'
+	},
+	ADMIN_DELETE_PASSWORD: {
+		schema: (value) => value || undefined,
+		description: 'Private password required to delete a recipe.'
 	}
 });

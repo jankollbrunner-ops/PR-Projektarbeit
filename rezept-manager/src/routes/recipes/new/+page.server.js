@@ -13,7 +13,16 @@ export const actions = {
 		const collection = await getRecipesCollection();
 		const now = new Date();
 		const videoId = await resolveTikTokVideoId(data.tiktokUrl);
-		const result = await collection.insertOne({ ...data, videoId, createdAt: now, updatedAt: now });
+		const rating = data.rating ?? 0;
+		const ratings = rating > 0 ? [rating] : [];
+		const result = await collection.insertOne({
+			...data,
+			rating,
+			ratings,
+			videoId,
+			createdAt: now,
+			updatedAt: now
+		});
 		redirect(303, `/recipes/${result.insertedId}`);
 	}
 };

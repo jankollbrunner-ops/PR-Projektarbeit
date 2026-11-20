@@ -122,12 +122,15 @@
 										<div class="card-meta">
 											<span
 												class="rating"
-												aria-label={recipe.rating ? `${recipe.rating} von 5 Sternen` : 'Noch nicht bewertet'}
+												aria-label={recipe.ratingCount
+													? `Durchschnitt ${recipe.rating.toFixed(1)} von 5 Sternen aus ${recipe.ratingCount} Bewertungen`
+													: 'Noch nicht bewertet'}
 											>
 												{#each [1, 2, 3, 4, 5] as star}
-													<span class:filled={star <= recipe.rating} aria-hidden="true">★</span>
+													<span class:filled={star <= Math.round(recipe.rating)} aria-hidden="true">★</span>
 												{/each}
 											</span>
+											<span class="rating-average">{recipe.ratingCount ? recipe.rating.toFixed(1) : '–'}</span>
 										</div>
 										<a class="details-link" href="/recipes/{recipe._id}">Rezept ansehen <span aria-hidden="true">→</span></a>
 									</div>
@@ -502,6 +505,7 @@
 	.card-meta {
 		align-items: center;
 		display: flex;
+		gap: 7px;
 		justify-content: flex-start;
 	}
 
@@ -515,6 +519,12 @@
 
 	.rating .filled {
 		color: #efa03c;
+	}
+
+	.rating-average {
+		color: #696c64;
+		font-size: 0.8rem;
+		font-weight: 650;
 	}
 
 	.empty-state {

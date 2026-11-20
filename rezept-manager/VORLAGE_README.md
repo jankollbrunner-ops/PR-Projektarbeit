@@ -5,7 +5,7 @@
 | Angabe | Inhalt |
 |---|---|
 | Projekttitel | TokRecipe – TikTok-Rezept-Manager |
-| Verfasser/in | _[Name, Klasse]_ |
+| Verfasser/in | Jan Kollbrunner, BIS VZ B |
 | GitHub-Repository | _[Link]_ |
 | Aktuelle App | _[Link]_ |
 | Getestete Version | _[Link; Commit/Tag]_ |
@@ -53,7 +53,7 @@ Kurz beschreiben, welches Problem adressiert wird und welches Ergebnis angestreb
 
 ## 2. Lösungsidee
 Beschreibt die Lösungsidee.
-- **Kernfunktionalität:** Rezepte mit Zutaten, Zubereitung und TikTok-Link erfassen, auf dem Dashboard kategorisiert suchen, Details ansehen sowie Rezepte bearbeiten, als gekocht markieren und löschen.
+- **Kernfunktionalität:** Rezepte mit Zutaten, optionaler Zubereitung und TikTok-Link erfassen, auf dem Dashboard kategorisiert suchen, Details ansehen, bearbeiten und löschen. Nach dem Kochen können weitere Bewertungen abgegeben werden; angezeigt wird der Durchschnitt aller Bewertungen.
 - **Annahmen [Optional]:** Eine strukturierte, schnell durchsuchbare Rezeptsammlung erleichtert das Wiederfinden und Nachkochen gespeicherter Kurzvideos.
 - **Abgrenzung [Optional]:** _[Was gehört explizit nicht zum Umfang?]_
 
@@ -80,15 +80,15 @@ Beschreibt die Gestaltung und Interaktion.
 > **Hinweis:** Hier wird der **Prototyp** beschrieben, nicht das **Mockup**.
 - **Informationsarchitektur:** Die gemeinsame Navigation enthält Home, Rezept hinzufügen und eine Rezeptsuche. Das Dashboard zeigt kategorisierte Rezeptkarten und ein Zufallsrezept; Erfassungsformular und Detailseite unterstützen das Speichern, Bearbeiten und Löschen.
 - **User Interface Design:** Helles, warmes Dashboard mit korallroten Aktionen, salbeigrüner Hero-Fläche und TikTok-Player-Vorschauen in den Rezeptkarten. Die Detailseite bindet den Player ebenfalls ein und bietet einen externen TikTok-Link als Ausweichmöglichkeit.
-- **Designentscheidungen:** Klare Typografie und sichtbare Aktionen unterstützen die spontane Nutzung. Zutaten, optionale schriftliche Kochschritte und optionale Portionenzahl sind getrennt und schnell erfassbar; wenn eine schriftliche Anleitung fehlt, hilft das eingebettete Video beim Nachkochen.
+- **Designentscheidungen:** Klare Typografie und sichtbare Aktionen unterstützen die spontane Nutzung. Zutaten, optionale schriftliche Kochschritte und optionale Portionenzahl sind getrennt und schnell erfassbar; wenn eine schriftliche Anleitung fehlt, hilft das eingebettete Video beim Nachkochen. Bewertungen können nach jedem erneuten Kochen ergänzt werden; Karten und Detailansicht zeigen den Durchschnitt sowie die Anzahl der Bewertungen.
 
 #### 3.4.2. Umsetzung (Technik)
 Fasst die technische Realisierung zusammen.
 - **Technologie-Stack:** SvelteKit 3, Svelte 5, JavaScript und MongoDB Node.js Driver.
 - **Tooling:** Visual Studio Code, Git, MongoDB Compass und MongoDB Atlas. KI-Unterstützung ist in Kap. 6 dokumentiert.
-- **Vorgehen bei der Implementierung:** Iterative Umsetzung der Dashboard-Oberfläche, Formular- und Detail-Workflows sowie der serverseitigen MongoDB-Anbindung. Die Verbindung zu MongoDB Atlas wurde eingerichtet und vom Studierenden als funktionsfähig bestätigt. TikTok-Videos werden über den offiziellen Embed Player eingebunden; für noch nicht auflösbare Kurzlinks wird die Video-ID über TikToks oEmbed-Schnittstelle ermittelt.
+- **Vorgehen bei der Implementierung:** Iterative Umsetzung der Dashboard-Oberfläche, Formular- und Detail-Workflows sowie der serverseitigen MongoDB-Anbindung. Die Verbindung zu MongoDB Atlas wurde eingerichtet und vom Studierenden als funktionsfähig bestätigt. Das Löschen eines Rezepts erfordert ein serverseitig geprüftes Admin-Passwort aus `ADMIN_DELETE_PASSWORD`. TikTok-Videos werden über den offiziellen Embed Player eingebunden; für noch nicht auflösbare Kurzlinks wird die Video-ID über TikToks oEmbed-Schnittstelle ermittelt.
 - **Struktur & Komponenten:** `src/routes/+page.svelte` und `+page.server.js` zeigen und suchen Rezepte. `/recipes/new` erfasst ein Rezept; `/recipes/[id]` zeigt, bearbeitet und löscht es. `src/lib/server/mongodb.js` kapselt den Datenbankzugriff; `recipe-form.js` validiert Formulareingaben.
-- **Daten & Schnittstellen:** Rezepte werden serverseitig in der MongoDB-Datenbank `tokrecipe`, Collection `recipes`, gespeichert und von dort geladen. Die Verbindungsdaten liegen lokal in `.env` und werden nicht versioniert. Die Datenbank und Collection entstehen mit dem ersten gespeicherten Rezept.
+- **Daten & Schnittstellen:** Rezepte werden serverseitig in der MongoDB-Datenbank `tokrecipe`, Collection `recipes`, gespeichert und von dort geladen. Einzelbewertungen werden als Liste gespeichert; der angezeigte Bewertungswert ist ihr Durchschnitt. Ältere Rezepte mit einer einzelnen Bewertung werden weiterhin unterstützt. Die Verbindungsdaten liegen lokal in `.env` und werden nicht versioniert. Die Datenbank und Collection entstehen mit dem ersten gespeicherten Rezept.
 - **Deployment:** Link siehe «Aktuelle App» in der [Projektübersicht](#projektübersicht--zugänge).
 - **Besondere Entscheidungen:** _[z. B. Trade-offs, Vereinfachungen]_  
 
@@ -168,7 +168,7 @@ _[Nutzen, Grenzen, Risiken/Qualitätssicherung, ...]_
 > **Hinweis zu Quellen und Urheberrecht:** Bei Verwendung fremder Inhalte (z. B. Code, Texte, Bilder, Icons, Vorlagen oder Modelle) sind die Quellen und die geltenden Lizenzen bzw. Nutzungsbedingungen anzugeben und einzuhalten. Diese Angaben sind verpflichtend, auch wenn der Anhang weggelassen wird. Sie können alternativ an den betreffenden Stellen der Dokumentation oder in einer verlinkten Quellenübersicht im Repository stehen. Erforderliche Hinweise direkt im Code oder bei verwendeten Inhalten bleiben zusätzlich bestehen.
 
 Beispiele:
-- **Quellen:** _[verwendete fremde Inhalte; Quelle/Link; Lizenz bzw. Nutzungsbedingungen]_
+- **Quellen:** Die TikTok-Videos werden über den [offiziellen TikTok Embed Player](https://developers.tiktok.com/docs/en/embed-player) eingebettet und nicht lokal kopiert. Der Original-Link bleibt pro Rezept gespeichert und ist auf der jeweiligen Detailseite erreichbar. Für Videos, die in Screenshots oder im Walkthrough konkret gezeigt werden, Creator/Account und Original-Link ergänzen; Nutzungsbedingungen der Plattform und Rechte der Urheber beachten.
 - **Testskript & Materialien:** _[Link/Datei]_  
 - **Rohdaten/Auswertung:** _[Link/Datei]_  
 
