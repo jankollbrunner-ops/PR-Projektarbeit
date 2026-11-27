@@ -2,19 +2,20 @@
 
 ## Project location and commands
 
-The application is in `rezept-manager/`; run npm commands from that directory.
+The application is located directly in the repository root. Run all npm commands from the repository root.
 
 ```powershell
 npm install
-Copy-Item .env.example .env
 npm run dev
 npm run build
 npm run preview
 ```
 
-Set `MONGODB_URI` and, when needed, `MONGODB_DB` in `.env`; `MONGODB_DB` defaults to `tokrecipe`. Recipe deletion also requires `ADMIN_DELETE_PASSWORD`. Keep actual credentials in the ignored `.env`, never in tracked files.
+Create or update `.env` in the repository root with `MONGODB_URI` and, when needed, `MONGODB_DB`; `MONGODB_DB` defaults to `tokrecipe`. Recipe deletion also requires `ADMIN_DELETE_PASSWORD`. Keep actual credentials in the ignored `.env`, never in tracked files. There is currently no tracked `.env.example`, so do not instruct contributors to copy one unless it is added.
 
 `npm run build` is the available project check. There is currently no test runner, test script, lint script, or test-file convention in the project, so there is no single-test command.
+
+`README.md` is the canonical project documentation and follows the project-documentation template. Keep `README.md` up to date; `VORLAGE_README.md` has been merged into it and no longer exists as a separate file.
 
 ## Architecture
 
@@ -31,4 +32,4 @@ Set `MONGODB_URI` and, when needed, `MONGODB_DB` in `.env`; `MONGODB_DB` default
 - Recipe category values and core field limits are validated centrally in `src/lib/server/recipe-form.js`. Keep form options and validation aligned; user-facing application text is German.
 - Authentication is intentionally a prototype: users identify themselves by username without a password. Sessions use the `tokrecipe_session` HttpOnly cookie and server-side expiry records. Preserve the shared `getSessionUser` flow when checking signed-in state; do not treat this prototype as production-grade authentication.
 - A TikTok URL can be a short link, so use `resolveTikTokVideoId` when a stored video ID is needed. It parses direct video IDs first, then uses TikTok oEmbed; successful resolutions are cached on the recipe document.
-- Keep `rezept-manager/VORLAGE_README.md` up to date whenever project changes affect its content, and supplement the template when needed so it reflects the current project.
+- Keep `README.md` up to date whenever project changes affect its content, including the deployment link, implementation details, evaluation results, screenshots, and KI declaration.
